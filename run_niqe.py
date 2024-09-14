@@ -472,6 +472,7 @@ def run_niqe(img_path):
         time_used = time.time() - time_start
     print(f"File: {img_path}, score: {niqe_result}")
     print(f'\t time used in sec: {time_used:.4f}')
+    return niqe_result
 
 
 if __name__ == '__main__':
@@ -482,10 +483,12 @@ if __name__ == '__main__':
         print(f"{img_path} is a file")
         run_niqe(img_path)
     elif os.path.isdir(img_path):
+        total_run_niqe = 0
         print(f"{img_path} is a directory")
         file_list = [os.path.join(img_path, f) for f in os.listdir(img_path) if os.path.isfile(os.path.join(img_path, f))]
         for file in file_list:
-            run_niqe(file)
+            total_run_niqe = total_run_niqe + run_niqe(file)
+        print(f"avg score: {total_run_niqe / len(file_list)}")
     else:
         print(f"{img_path} is not a valid file or directory")
 
