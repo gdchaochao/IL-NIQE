@@ -2,6 +2,7 @@ import cv2
 import math
 import numpy as np
 import os
+import sys
 from scipy.ndimage.filters import convolve
 from scipy.signal import convolve2d
 from scipy.special import gamma
@@ -462,17 +463,30 @@ def calculate_ilniqe(img, crop_border, input_order='HWC', num_cpus=3, resize=Tru
     return ilniqe_result
 
 
-if __name__ == '__main__':
-    import warnings
-
-    img_path = './pepper_exa/pepper_4.png'
+def run_niqe(img_path):
     img = cv2.imread(img_path)
     with warnings.catch_warnings():
         warnings.simplefilter('ignore', category=RuntimeWarning)
         time_start = time.time()
-
         niqe_result = calculate_ilniqe(img, 0, input_order='HWC', resize=True, version='python')
-
         time_used = time.time() - time_start
-    print(niqe_result)
+    print(f"File: {img_path}, score: {niqe_result}")
     print(f'\t time used in sec: {time_used:.4f}')
+
+
+if __name__ == '__main__':
+    import warnings
+    # img_path = './pepper_exa/pepper_4.png'
+    img_path = sys.argv[1]
+    if os.path.isfile(img_path):
+        print(f"{img_path} is a file")
+        run_niqe(img_path)
+    elif os.path.isdir(img_path):
+        print(f"{img_path} is a directory")
+        file_list = [os.path.join(img_path, f) for f in os.listdir(img_path) if os.path.isfile(os.path.join(img_path, f))]
+        for file in file_list:
+            run_niqe(file)
+    else:
+        print(f"{img_path} is not a valid file or directory")
+
+
