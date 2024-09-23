@@ -7,7 +7,8 @@ This is the python implement for [IL-NIQE](http://www4.comp.polyu.edu.hk/~cslzha
 * Test:
 
 ```bash
-python IL-NIQE.py
+python IL-NIQE.py ./test_data/video1
+python IL-NIQE.py ./test_data/video1/tubu_4k.jpg
 ```
 
 * Train
